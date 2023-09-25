@@ -1,6 +1,7 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
+from django.db.models import Count
 from django.http import HttpRequest
 
 from robots.models import Robot
@@ -51,3 +52,20 @@ def validate_new_robot_request(request: HttpRequest) -> dict[str, str] | None:
         raise ValueError("A robot assembled at this second already exists")
 
     return params
+
+
+def get_last_week_report() -> dict:
+    models = tuple(Robot.objects.values_list("model", flat=True).distinct())
+    last_week_end = datetime.now()
+    last_week_start = last_week_end - timedelta(days=7)
+
+    result = {}
+    for model in models:
+        model_data = tuple(
+            Robot.objects.filter(model=model, created__range=(last_week_start, last_week_end))
+            .values("version")
+            .annotate(count=Count("id"))
+        )
+        result |= {model: model_data}
+
+    return result

@@ -7,14 +7,20 @@ from django.http import HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from robots.models import Robot
-from robots.utils import validate_new_robot_request
+from robots.utils import validate_new_robot_request, get_last_week_report
 
 
 @csrf_exempt
 def robots_view(request: HttpRequest) -> JsonResponse:
     match request.method:
-        # case "GET":
-        #     ...
+        case "GET":
+            return JsonResponse(
+                {
+                    "status": "success",
+                    "data": get_last_week_report(),
+                },
+                status=HTTPStatus.OK,
+            )
 
         case "POST":
             try:
