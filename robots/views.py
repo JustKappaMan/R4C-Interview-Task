@@ -3,24 +3,19 @@ from http import HTTPStatus
 from datetime import datetime
 
 from django.core import serializers
-from django.http import HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpRequest, JsonResponse, FileResponse
 
 from robots.models import Robot
-from robots.utils import validate_new_robot_request, get_last_week_report
+from robots.utils import validate_new_robot_request, create_xlsx_file
 
 
 @csrf_exempt
-def robots_view(request: HttpRequest) -> JsonResponse:
+def robots_view(request: HttpRequest) -> JsonResponse | FileResponse:
     match request.method:
         case "GET":
-            return JsonResponse(
-                {
-                    "status": "success",
-                    "data": get_last_week_report(),
-                },
-                status=HTTPStatus.OK,
-            )
+            file_path = create_xlsx_file()
+            return FileResponse(open(file_path, "rb"))
 
         case "POST":
             try:

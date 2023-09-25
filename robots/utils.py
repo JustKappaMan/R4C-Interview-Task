@@ -1,8 +1,13 @@
 import json
+from pathlib import Path
 from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.db.models import Count
 from django.http import HttpRequest
+
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Font
 
 from robots.models import Robot
 
@@ -54,18 +59,59 @@ def validate_new_robot_request(request: HttpRequest) -> dict[str, str] | None:
     return params
 
 
-def get_last_week_report() -> dict:
-    models = tuple(Robot.objects.values_list("model", flat=True).distinct())
-    last_week_end = datetime.now()
-    last_week_start = last_week_end - timedelta(days=7)
+def get_last_week_report() -> tuple[datetime, dict]:
+    models = Robot.objects.values_list("model", flat=True).distinct()
+    now = datetime.now()
+    week_ago = now - timedelta(days=7)
 
-    result = {}
+    data = {}
     for model in models:
         model_data = tuple(
-            Robot.objects.filter(model=model, created__range=(last_week_start, last_week_end))
+            Robot.objects.filter(model=model, created__range=(week_ago, now))
             .values("version")
             .annotate(count=Count("id"))
         )
-        result |= {model: model_data}
+        if model_data:
+            data |= {model: model_data}
 
-    return result
+    return now, data
+
+
+def create_xlsx_file() -> Path:
+    wb = Workbook()
+    timestamp, data = get_last_week_report()
+
+    # Optimization. Create all of these only once since header is the same on every sheet.
+    header = (("A1", "Модель"), ("B1", "Версия"), ("C1", "Количество за неделю"))
+    header_font = Font(bold=True)
+    header_alignment = Alignment(horizontal="center", vertical="center")
+
+    for model, model_data in data.items():
+        # Create sheet and resize table
+        ws = wb.create_sheet(model)
+        ws.column_dimensions["A"].width = 10
+        ws.column_dimensions["B"].width = 10
+        ws.column_dimensions["C"].width = 25
+
+        # Fill table header
+        for cell, value in header:
+            ws[cell] = value
+            ws[cell].font = header_font
+            ws[cell].alignment = header_alignment
+
+        # Fill table rows
+        for row_idx, version_data in enumerate(model_data, start=2):
+            ws[f"A{row_idx}"], ws[f"B{row_idx}"], ws[f"C{row_idx}"] = (
+                model,
+                version_data["version"],
+                version_data["count"],
+            )
+
+    wb.remove(wb["Sheet"])  # Remove default empty sheet from workbook
+
+    wb_folder = Path(settings.BASE_DIR, "reports")
+    wb_folder.mkdir(parents=True, exist_ok=True)
+    wb_file = wb_folder / f"report_{timestamp.strftime('%Y%m%d_%H%M%S')}.xlsx"
+    wb.save(wb_file)
+
+    return wb_file
