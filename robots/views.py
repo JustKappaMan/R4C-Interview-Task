@@ -14,8 +14,12 @@ from robots.utils import validate_new_robot_request, create_xlsx_file
 def robots_view(request: HttpRequest) -> JsonResponse | FileResponse:
     match request.method:
         case "GET":
-            file_path = create_xlsx_file()
-            return FileResponse(open(file_path, "rb"))
+            try:
+                file_path = create_xlsx_file()
+            except Exception as e:
+                return JsonResponse({"status": "error", "message": f"{e}"}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
+
+            return FileResponse(open(file_path, "rb"), status=HTTPStatus.OK)
 
         case "POST":
             try:
