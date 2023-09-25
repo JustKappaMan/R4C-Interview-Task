@@ -60,12 +60,15 @@ def validate_new_robot_request(request: HttpRequest) -> dict[str, str] | None:
 
 
 def get_last_week_report() -> tuple[datetime, dict]:
+    """Return summary of robot production totals for the last week"""
     models = Robot.objects.values_list("model", flat=True).distinct()
     now = datetime.now()
     week_ago = now - timedelta(days=7)
 
     data = {}
     for model in models:
+        # Extract each model production totals
+        # e.g. ({"version": "D2", "count": "42"}, {"version": "D3", "count": "7"}, ...)
         model_data = tuple(
             Robot.objects.filter(model=model, created__range=(week_ago, now))
             .values("version")
@@ -78,6 +81,7 @@ def get_last_week_report() -> tuple[datetime, dict]:
 
 
 def create_xlsx_file() -> Path:
+    """Save data received from `get_last_week_report()` as `.xlsx` file. Return its path."""
     wb = Workbook()
     timestamp, data = get_last_week_report()
 
