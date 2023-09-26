@@ -1,9 +1,9 @@
 import json
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from django.conf import settings
-from django.db.models import Count
+from django.utils import timezone
 from django.http import HttpRequest
 
 from openpyxl import Workbook
@@ -13,7 +13,7 @@ from robots.models import Robot
 
 
 def validate_new_robot_request(request: HttpRequest) -> dict[str, str] | None:
-    """Return valid JSON from `request.body` as dict.
+    """Return valid JSON from `request.body` as `dict`.
     If JSON doesn't meet the requirements, raise either `TypeError` or `ValueError` with corresponding message.
     """
 
@@ -46,56 +46,46 @@ def validate_new_robot_request(request: HttpRequest) -> dict[str, str] | None:
             raise ValueError(f"'{param}' must contain exactly {valid_length} non-whitespace characters")
 
     # Verify that the timestamp is in the correct format
-    dt_format = "%Y-%m-%d %H:%M:%S"
+    timestamp_format = "%Y-%m-%d %H:%M:%S"
     try:
-        dt = datetime.strptime(params["created"], dt_format)
+        timestamp = datetime.strptime(params["created"], timestamp_format)
     except ValueError:
-        raise ValueError(f"'created' must match the following pattern: '{dt_format}'")
+        raise ValueError(f"'created' must match the following pattern: '{timestamp_format}'")
 
     # Make sure there's no robot already assembled at that second
-    if Robot.objects.filter(created=dt).first() is not None:
+    if Robot.objects.is_assembled_at_second(timestamp):
         raise ValueError("A robot assembled at this second already exists")
 
     return params
 
 
-def get_last_week_report() -> tuple[datetime, dict]:
+def get_last_week_stats() -> dict:
     """Return summary of robot production totals for the last week"""
-    models = Robot.objects.values_list("model", flat=True).distinct()
-    now = datetime.now()
-    week_ago = now - timedelta(days=7)
-
     data = {}
-    for model in models:
-        # Extract each model production totals
-        # e.g. ({"version": "D2", "count": "42"}, {"version": "D3", "count": "7"}, ...)
-        model_data = tuple(
-            Robot.objects.filter(model=model, created__range=(week_ago, now))
-            .values("version")
-            .annotate(count=Count("id"))
-        )
-        if model_data:
-            data |= {model: model_data}
+    for model in Robot.objects.models():
+        data |= Robot.objects.last_week_production_summary(model=model)
 
-    return now, data
+    return data
 
 
 def create_xlsx_file() -> Path:
-    """Save data received from `get_last_week_report()` as `.xlsx` file. Return its path."""
+    """Save data received from `get_last_week_stats()` as `.xlsx` file. Return its path."""
     wb = Workbook()
-    timestamp, data = get_last_week_report()
+    timestamp = timezone.now()  # Will be added to filename to make it unique and informative
+    data = get_last_week_stats()
 
     # Optimization. Create all of these only once since header is the same on every sheet.
     header = (("A1", "Модель"), ("B1", "Версия"), ("C1", "Количество за неделю"))
     header_font = Font(bold=True)
     header_alignment = Alignment(horizontal="center", vertical="center")
+    narrow_column_width, wide_column_width = 10, 25
 
     for model, model_data in data.items():
         # Create sheet and resize table
         ws = wb.create_sheet(model)
-        ws.column_dimensions["A"].width = 10
-        ws.column_dimensions["B"].width = 10
-        ws.column_dimensions["C"].width = 25
+        ws.column_dimensions["A"].width = narrow_column_width
+        ws.column_dimensions["B"].width = narrow_column_width
+        ws.column_dimensions["C"].width = wide_column_width
 
         # Fill table header
         for cell, value in header:
@@ -113,9 +103,9 @@ def create_xlsx_file() -> Path:
 
     wb.remove(wb["Sheet"])  # Remove default empty sheet from workbook
 
-    wb_folder = Path(settings.BASE_DIR, "reports")
-    wb_folder.mkdir(parents=True, exist_ok=True)
-    wb_file = wb_folder / f"report_{timestamp.strftime('%Y%m%d_%H%M%S')}.xlsx"
-    wb.save(wb_file)
+    output_folder = Path(settings.BASE_DIR, "reports")
+    output_folder.mkdir(parents=True, exist_ok=True)
+    output_file = output_folder / f"report_{timestamp.strftime('%Y%m%d_%H%M%S')}.xlsx"
+    wb.save(output_file)
 
-    return wb_file
+    return output_file
