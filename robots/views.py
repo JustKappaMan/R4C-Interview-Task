@@ -11,16 +11,8 @@ from robots.utils import validate_new_robot_request, create_xlsx_file
 
 
 @csrf_exempt
-def robots_view(request: HttpRequest) -> JsonResponse | FileResponse:
-    if request.method == "GET":
-        try:
-            file_path = create_xlsx_file()
-        except Exception as e:
-            return JsonResponse({"status": "error", "message": f"{e}"}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
-        else:
-            return FileResponse(open(file_path, "rb"), status=HTTPStatus.OK)
-
-    elif request.method == "POST":
+def new_robot_view(request: HttpRequest) -> JsonResponse:
+    if request.method == "POST":
         try:
             params = validate_new_robot_request(request)
         except (TypeError, ValueError) as e:
@@ -40,12 +32,24 @@ def robots_view(request: HttpRequest) -> JsonResponse | FileResponse:
             },
             status=HTTPStatus.OK,
         )
-
     else:
         return JsonResponse(
-            {
-                "status": "error",
-                "message": HTTPStatus.METHOD_NOT_ALLOWED.phrase
-            },
+            {"status": "error", "message": HTTPStatus.METHOD_NOT_ALLOWED.phrase},
+            status=HTTPStatus.METHOD_NOT_ALLOWED,
+        )
+
+
+@csrf_exempt
+def last_week_stats_view(request: HttpRequest) -> JsonResponse | FileResponse:
+    if request.method == "GET":
+        try:
+            file_path = create_xlsx_file()
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": f"{e}"}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
+        else:
+            return FileResponse(open(file_path, "rb"), status=HTTPStatus.OK)
+    else:
+        return JsonResponse(
+            {"status": "error", "message": HTTPStatus.METHOD_NOT_ALLOWED.phrase},
             status=HTTPStatus.METHOD_NOT_ALLOWED,
         )
