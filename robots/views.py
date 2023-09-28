@@ -39,7 +39,6 @@ def new_robot_view(request: HttpRequest) -> JsonResponse:
         )
 
 
-@csrf_exempt
 def last_week_stats_view(request: HttpRequest) -> JsonResponse | FileResponse:
     if request.method == "GET":
         try:

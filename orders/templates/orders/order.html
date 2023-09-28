@@ -8,6 +8,7 @@
 </head>
 <body>
 <form method="POST" action={% url 'new_order_view' %}>
+    {% csrf_token %}
     <label for="serial-field">
         Serial of the robot you want to order
         <input name="serial" id="serial-field" type="text" pattern="^[a-zA-Z0-9]{2}-[a-zA-Z0-9]{2}$" placeholder="R2-D2" required>

@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpRequest, HttpResponse, HttpResponseNotAllowed, JsonResponse
 
 from orders.models import Order
@@ -7,7 +6,6 @@ from customers.models import Customer
 from orders.utils import validate_new_order_request
 
 
-@csrf_exempt
 def new_order_view(request: HttpRequest) -> HttpResponse | JsonResponse:
     if request.method == "GET":
         return render(request, template_name="orders/order.html")
