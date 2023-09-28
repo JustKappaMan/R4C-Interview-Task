@@ -1,9 +1,8 @@
 from django.shortcuts import render
+from django.views.decorators.http import require_GET
 from django.http import HttpRequest, HttpResponse, HttpResponseNotAllowed
 
 
+@require_GET
 def index_view(request: HttpRequest) -> HttpResponse | HttpResponseNotAllowed:
-    if request.method == "GET":
-        return render(request, template_name="home/index.html")
-    else:
-        return HttpResponseNotAllowed(permitted_methods=("GET",))
+    return render(request, template_name="home/index.html")

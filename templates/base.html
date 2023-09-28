@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>РобоКомплекс — Главная страница</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header><h1>РобоКомплекс</h1></header>
+    <main>{% block content %}{% endblock content %}</main>
+    <footer>&copy; 2023 ООО «РОБОКОМПЛЕКС»</footer>
+</body>
+</html>

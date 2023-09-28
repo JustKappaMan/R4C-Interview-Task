@@ -1,11 +1,17 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home Page</title>
-</head>
-<body>
-</body>
-</html>
+{% block content %}
+    <div class="main-page-section">
+        <p>Добавление информации о новом роботе в БД осуществляется путём отправки POST-запроса, содержащего данные в формате JSON на специальный endpoint.</p>
+        <br>
+        <p><b>Адрес: </b><a href="{% url 'new_robot_view' %}">/robots/new</a></p>
+        <br>
+        <p><b>Пример данных: </b><code>{"model": "R2", "version": "D2", "created": "2023-09-29 16:17:18"}</code></p>
+    </div>
+    <div class="main-page-section">
+        <p>Кликнув по <a href="{% url 'last_week_stats_view' %}">этой ссылке</a> Вы скачаете Excel-файл со сводкой по суммарным показателям производства роботов за последнюю неделю.</p>
+    </div>
+    <div class="main-page-section">
+        <p>Перейдя по <a href="{% url 'new_order_view' %}">этой ссылке</a> Вы сможете оставить заявку на приобретение любого робота. Мы отправим уведомление на Вашу электронную почту как только он появится в наличии.</p>
+    </div>
+{% endblock content %}

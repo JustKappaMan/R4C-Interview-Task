@@ -1,0 +1,48 @@
+:root {
+    --retroGreen: #33FF33;
+    --retroBlack: #282828;
+    font-size: 16px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: var(--retroBlack);
+    font-family: monospace;
+    color: var(--retroGreen);
+}
+
+*::selection {
+    color: var(--retroBlack);
+    background: var(--retroGreen);
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    min-height: 1em;
+    margin: 1em 0;
+    text-align: center;
+}
+
+main {
+    flex: 1;
+}
+
+.main-page-section {
+    padding: 1em;
+    margin: 2em 4em;
+    outline: 1px dashed var(--retroGreen);
+}
+
+footer {
+    min-height: 1em;
+    margin: 1em 0;
+    text-align: center;
+    font-size: small;
+}
