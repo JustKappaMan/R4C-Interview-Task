@@ -1,9 +1,10 @@
 import json
 from http import HTTPStatus
-from datetime import datetime
+from datetime import datetime as dt
 
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.timezone import get_default_timezone
 from django.http import HttpRequest, JsonResponse, FileResponse
 
 from robots.models import Robot
@@ -22,7 +23,7 @@ def new_robot_view(request: HttpRequest) -> JsonResponse:
             serial=f"{params['model']}-{params['version']}",
             model=params["model"],
             version=params["version"],
-            created=datetime.strptime(params["created"], "%Y-%m-%d %H:%M:%S"),
+            created=dt.strptime(params["created"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=get_default_timezone()),
         )
 
         return JsonResponse(

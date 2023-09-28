@@ -1,9 +1,9 @@
 import json
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime as dt
 
 from django.conf import settings
-from django.utils import timezone
+from django.utils import timezone as tz
 from django.http import HttpRequest
 
 from openpyxl import Workbook
@@ -48,7 +48,7 @@ def validate_new_robot_request(request: HttpRequest) -> dict[str, str] | None:
     # Verify that the timestamp is in the correct format
     timestamp_format = "%Y-%m-%d %H:%M:%S"
     try:
-        timestamp = datetime.strptime(params["created"], timestamp_format)
+        timestamp = dt.strptime(params["created"], timestamp_format).replace(tzinfo=tz.get_default_timezone())
     except ValueError:
         raise ValueError(f"'created' must match the following pattern: '{timestamp_format}'")
 
@@ -71,7 +71,7 @@ def get_last_week_stats() -> dict:
 def create_xlsx_file() -> Path:
     """Save data received from `get_last_week_stats()` as `.xlsx` file. Return its path."""
     wb = Workbook()
-    timestamp = timezone.now()  # Will be added to filename to make it unique and informative
+    timestamp = tz.now()  # Will be added to filename to make it unique and informative
     data = get_last_week_stats()
 
     # Optimization. Create all of these only once since header is the same on every sheet.
