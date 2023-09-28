@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>New Order</title>
+</head>
+<body>
+<form method="POST" action={% url 'new_order_view' %}>
+    <label for="serial-field">
+        Serial of the robot you want to order
+        <input name="serial" id="serial-field" type="text" pattern="^[a-zA-Z0-9]{2}-[a-zA-Z0-9]{2}$" placeholder="R2-D2" required>
+    </label>
+    <label for="email-field">
+        Your email
+        <input name="email" id="email-field" type="email" maxlength="255" placeholder="address@example.org" required>
+    </label>
+    <input type="submit" value="Notify me">
+</form>
+</body>
+</html>

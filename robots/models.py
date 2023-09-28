@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 
 from django.db import models
@@ -32,3 +33,8 @@ class Robot(models.Model):
     version = models.CharField(max_length=2, blank=False, null=False)
     created = models.DateTimeField(blank=False, null=False)
     objects = RobotsManager()
+
+    @staticmethod
+    def serial_is_valid(serial: str) -> bool:
+        """Return `True` if `serial` is something like 'R2-D2', '13-xs' etc., otherwise `False`"""
+        return re.fullmatch("[a-zA-Z0-9]{2}-[a-zA-Z0-9]{2}", serial) is not None
