@@ -1,4 +1,4 @@
-import re
+from re import fullmatch
 from datetime import datetime
 
 from django.db import models
@@ -37,4 +37,4 @@ class Robot(models.Model):
     @staticmethod
     def serial_is_valid(serial: str) -> bool:
         """Return `True` if `serial` is something like 'R2-D2', '13-xs' etc., otherwise `False`"""
-        return re.fullmatch("[a-zA-Z0-9]{2}-[a-zA-Z0-9]{2}", serial) is not None
+        return fullmatch("[a-zA-Z0-9]{2}-[a-zA-Z0-9]{2}", serial) is not None

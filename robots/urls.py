@@ -1,6 +1,6 @@
 from django.urls import path
 
-from robots.views import *
+from robots.views import new_robot_view, last_week_stats_view
 
 
 urlpatterns = [

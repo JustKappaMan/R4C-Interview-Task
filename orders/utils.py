@@ -49,4 +49,3 @@ def notify_customer_robot_available(sender, instance, **kwargs):
             "Этот робот теперь в наличии. Если Вам подходит этот вариант - пожалуйста, свяжитесь с нами."
         )
         send_mail(email_subject, email_message, "from@example.com", (order.customer.email,))
-        print("Email has been sent!")
