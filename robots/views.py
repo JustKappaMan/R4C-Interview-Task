@@ -49,7 +49,8 @@ def last_week_stats_view(request: HttpRequest) -> FileResponse:
     """Response with .xlsx file containing summary of robot production totals for the last week"""
     try:
         file_path = create_xlsx_file()
-    except (Exception,):
+    except (Exception,) as e:
+        print(e)
         return redirect(reverse("last_week_stats_error_view"))
     else:
         return FileResponse(open(file_path, "rb"), status=HTTPStatus.OK)

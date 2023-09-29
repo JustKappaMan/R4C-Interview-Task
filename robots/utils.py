@@ -101,7 +101,8 @@ def create_xlsx_file() -> Path:
                 version_data["count"],
             )
 
-    wb.remove(wb["Sheet"])  # Remove default empty sheet from workbook
+    if len(wb.worksheets) > 1:
+        wb.remove(wb["Sheet"])  # Remove default empty sheet from workbook
 
     output_folder = Path(settings.BASE_DIR, "reports")
     output_folder.mkdir(parents=True, exist_ok=True)

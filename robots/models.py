@@ -15,11 +15,15 @@ class RobotsManager(models.Manager):
         """Extract `Robot.model` production totals for the last week
         e.g. {"R2": ({"version": "D2", "count": "42"}, {"version": "D3", "count": "7"}), ...}
         """
+        now = timezone.now()
+        week_ago = now - timezone.timedelta(weeks=1)
+
         data = tuple(
-            self.filter(model=model, created__gte=timezone.now() - timezone.timedelta(weeks=1))
+            self.filter(model=model, created__range=(week_ago, now))
             .values("version")
             .annotate(count=Count("id"))
         )
+
         return {model: data} if data else {}
 
     def is_assembled_at_second(self, timestamp: datetime) -> bool:
