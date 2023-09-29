@@ -50,3 +50,4 @@ def notify_customers_robot_available(sender, instance, **kwargs):
         )
         for order in orders:
             send_mail(email_subject, email_message, "from@example.com", (order.customer.email,))
+            order.delete()
