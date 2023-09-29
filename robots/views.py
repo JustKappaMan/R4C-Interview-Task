@@ -2,11 +2,13 @@ import json
 from http import HTTPStatus
 from datetime import datetime as dt
 
+from django.urls import reverse
 from django.core import serializers
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET
 from django.utils.timezone import get_default_timezone
-from django.http import HttpRequest, JsonResponse, FileResponse, HttpResponseNotAllowed
+from django.http import HttpRequest, HttpResponse, JsonResponse, FileResponse
 
 from robots.models import Robot
 from robots.utils import validate_new_robot_request, create_xlsx_file
@@ -43,11 +45,17 @@ def new_robot_view(request: HttpRequest) -> JsonResponse:
 
 
 @require_GET
-def last_week_stats_view(request: HttpRequest) -> FileResponse | HttpResponseNotAllowed:
+def last_week_stats_view(request: HttpRequest) -> FileResponse:
     """Response with .xlsx file containing summary of robot production totals for the last week"""
     try:
         file_path = create_xlsx_file()
-    except Exception as e:
-        raise e
+    except (Exception,):
+        return redirect(reverse("last_week_stats_error_view"))
     else:
         return FileResponse(open(file_path, "rb"), status=HTTPStatus.OK)
+
+
+@require_GET
+def last_week_stats_error_view(request: HttpRequest) -> HttpResponse:
+    """Displayed when generating a report is failed due to some exception"""
+    return render(request, template_name="robots/fail.html")

@@ -2,6 +2,7 @@
     --retroGreen: #33FF33;
     --retroBlack: #282828;
     font-size: 16px;
+    text-shadow: 0 0 4px var(--retroGreen);
 }
 
 * {
@@ -22,27 +23,66 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    padding: 1em;
 }
 
 header {
-    min-height: 1em;
-    margin: 1em 0;
+    min-height: min-content;
     text-align: center;
+    font-size: xxx-large;
 }
 
 main {
     flex: 1;
-}
-
-.main-page-section {
-    padding: 1em;
-    margin: 2em 4em;
-    outline: 1px dashed var(--retroGreen);
+    margin: 0 auto;
 }
 
 footer {
-    min-height: 1em;
-    margin: 1em 0;
+    min-height: min-content;
     text-align: center;
     font-size: small;
+}
+
+a:hover {
+    text-shadow: 0 0 10px var(--retroGreen);
+}
+
+div.retro {
+    margin: 2em 0;
+    padding: 1em;
+    outline: 1px dashed var(--retroGreen);
+    box-shadow: 0 0 5px var(--retroGreen);
+}
+
+form.retro {
+    display: inline-block;
+    margin: 2em 0;
+    padding: 1em;
+    outline: 1px dashed var(--retroGreen);
+    box-shadow: 0 0 5px var(--retroGreen);
+}
+
+
+input.retro {
+    padding: 2px;
+    border: 1px solid var(--retroGreen);
+    box-shadow: 0 0 5px var(--retroGreen);
+}
+
+input.retro:focus, input.retro:hover {
+    outline: none !important;
+    box-shadow: 0 0 10px var(--retroGreen);
+}
+
+
+input[type="submit"].retro {
+    padding: 4px;
+    border: 1px solid var(--retroGreen);
+    box-shadow: 0 0 5px var(--retroGreen);
+}
+
+input[type="submit"].retro:hover, input[type="submit"].retro:focus {
+    cursor: pointer;
+    outline: none !important;
+    box-shadow: 0 0 10px var(--retroGreen);
 }
