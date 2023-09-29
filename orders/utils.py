@@ -36,9 +36,9 @@ def validate_new_order_request(request: HttpRequest) -> dict[str, str] | None:
 
 
 @receiver(post_save, sender=Robot)
-def notify_customer_robot_available(sender, instance, **kwargs):
+def notify_customers_robot_available(sender, instance, **kwargs):
     try:
-        order = Order.objects.get(robot_serial=instance.serial)
+        orders = Order.objects.filter(robot_serial=instance.serial)
     except Order.DoesNotExist:
         pass
     else:
@@ -48,4 +48,5 @@ def notify_customer_robot_available(sender, instance, **kwargs):
             f"Недавно Вы интересовались нашим роботом модели {instance.model}, версии {instance.version}.\n\n"
             "Этот робот теперь в наличии. Если Вам подходит этот вариант - пожалуйста, свяжитесь с нами."
         )
-        send_mail(email_subject, email_message, "from@example.com", (order.customer.email,))
+        for order in orders:
+            send_mail(email_subject, email_message, "from@example.com", (order.customer.email,))
