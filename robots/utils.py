@@ -44,6 +44,7 @@ def validate_new_robot_request(request: HttpRequest) -> dict[str, str] | None:
     for param in ("model", "version"):
         if len(params[param]) != valid_length or len(params[param].strip()) != valid_length:
             raise ValueError(f"'{param}' must contain exactly {valid_length} non-whitespace characters")
+        params[param] = params[param].upper()
 
     # Verify that the timestamp is in the correct format
     timestamp_format = "%Y-%m-%d %H:%M:%S"

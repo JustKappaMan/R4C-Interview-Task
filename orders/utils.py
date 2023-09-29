@@ -28,4 +28,4 @@ def validate_new_order_request(request: HttpRequest) -> dict[str, str] | None:
     if not Customer.email_is_valid(email):
         raise ValueError("email is invalid")
 
-    return {"serial": serial, "email": email}
+    return {"serial": serial.upper(), "email": email}
