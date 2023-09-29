@@ -17,7 +17,7 @@ def notify_customers_robot_available(sender, instance, **kwargs) -> None:
         email_message = (
             "Здравствуйте!\n\n"
             f"Недавно Вы интересовались нашим роботом модели {instance.model}, версии {instance.version}.\n\n"
-            "Этот робот теперь в наличии. Если Вам подходит этот вариант - пожалуйста, свяжитесь с нами."
+            "Этот робот теперь в наличии. Если Вам подходит этот вариант — пожалуйста, свяжитесь с нами."
         )
         for order in orders:
             send_mail(email_subject, email_message, "info@robocomplex.com", (order.customer.email,))
