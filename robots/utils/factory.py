@@ -7,12 +7,10 @@ from django.http import HttpRequest
 from robots.models import Robot
 
 
-def _validate_new_robot_request(request: HttpRequest) -> dict[str, str] | None:
+def _json_request_to_dict(request: HttpRequest) -> dict | None:
     """Return valid JSON from `request.body` as `dict`.
-    If JSON doesn't meet the requirements, raise either `TypeError` or `ValueError` with corresponding message.
+    If JSON isn't valid or doesn't use UTF-8 encoding, raise `ValueError` with corresponding message.
     """
-
-    # Verify that JSON is valid and uses UTF-8 encoding
     try:
         params = json.loads(request.body.decode("utf-8"))
     except UnicodeError:
@@ -22,6 +20,15 @@ def _validate_new_robot_request(request: HttpRequest) -> dict[str, str] | None:
     else:
         if not isinstance(params, dict):
             raise ValueError("Invalid JSON")
+
+    return params
+
+
+def _validate_new_robot_request(request: HttpRequest) -> dict[str, str] | None:
+    """Return valid JSON that meet some requirements from `request.body` as `dict`.
+    If something is wrong, raise either `TypeError` or `ValueError` with corresponding message.
+    """
+    params = _json_request_to_dict(request)
 
     # Verify that JSON has all required params as strings
     required_params = ("model", "version", "created")
@@ -34,12 +41,11 @@ def _validate_new_robot_request(request: HttpRequest) -> dict[str, str] | None:
         if not isinstance(params[param], str):
             raise TypeError(f"'{param}' must be a string")
 
-    # Verify that `model` and `version` are valid and make them uppercase
+    # Verify that `model` and `version` are valid
     valid_length = 2
     for param in ("model", "version"):
         if len(params[param]) != valid_length or len(params[param].strip()) != valid_length:
             raise ValueError(f"'{param}' must contain exactly {valid_length} non-whitespace characters")
-        params[param] = params[param].upper()
 
     # Verify that the timestamp is in the correct format
     timestamp_format = "%Y-%m-%d %H:%M:%S"
@@ -51,6 +57,10 @@ def _validate_new_robot_request(request: HttpRequest) -> dict[str, str] | None:
     # Make sure there's no robot already assembled at that second
     if Robot.objects.is_assembled_at_second(timestamp):
         raise ValueError("A robot assembled at this second already exists")
+
+    # Normalization. Make `model` and `version` uppercase.
+    params["model"] = params["model"].upper()
+    params["version"] = params["version"].upper()
 
     return params
 

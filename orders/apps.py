@@ -5,4 +5,4 @@ class OrdersConfig(AppConfig):
     name = "orders"
 
     def ready(self):
-        import orders.signals
+        import orders.utils.signals

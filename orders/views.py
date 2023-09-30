@@ -3,9 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from django.views.decorators.http import require_http_methods, require_GET
 
-from orders.models import Order
-from customers.models import Customer
-from orders.utils import validate_new_order_request
+from orders.utils.factory import create_new_order
 
 
 @require_http_methods(("GET", "POST"))
@@ -16,12 +14,10 @@ def new_order_view(request: HttpRequest) -> HttpResponse:
 
     if request.method == "POST":
         try:
-            data = validate_new_order_request(request)
+            create_new_order(request)
         except ValueError:
             return redirect(reverse("failed_order_view"))
         else:
-            new_customer = Customer.objects.create(email=data["email"])
-            Order.objects.create(customer=new_customer, robot_serial=data["serial"])
             return redirect(reverse("successful_order_view"))
 
 

@@ -8,11 +8,10 @@ from robots.models import Robot
 
 @receiver(post_save, sender=Robot)
 def notify_customers_robot_available(sender, instance, **kwargs) -> None:
-    try:
-        orders = Order.objects.filter(robot_serial=instance.serial)
-    except Order.DoesNotExist:
-        pass
-    else:
+    """Notify all customers who ordered a robot when the one they desired is assembled.
+    Delete orders from DB after sending notifications.
+    """
+    if orders := Order.objects.filter(robot_serial=instance.serial):
         email_subject = "Робот доступен к покупке!"
         email_message = (
             "Здравствуйте!\n\n"
