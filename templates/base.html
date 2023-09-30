@@ -20,7 +20,7 @@
     <link rel="shortcut icon" href="{% static 'images/icons/favicon.ico' %}">
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <title>РобоКомплекс</title>
+    <title>{% block title %}{% endblock title %}</title>
 </head>
 <body>
     <header><a href="/">РобоКомплекс</a></header>
