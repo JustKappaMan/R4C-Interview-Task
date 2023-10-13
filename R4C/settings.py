@@ -86,6 +86,39 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Logging
+
+LOGS_DIR = BASE_DIR / "logs"
+LOGS_DIR.mkdir(exist_ok=True)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "info_to_file": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": LOGS_DIR / "log",
+            "level": "INFO",
+            "formatter": "general",
+            "when": "midnight",
+            "backupCount": 30,
+        },
+    },
+    "loggers": {
+        "": {
+            "level": "INFO",
+            "handlers": ["info_to_file"],
+        },
+    },
+    "formatters": {
+        "general": {
+            "format": "[{asctime}] [{levelname}] {name}: {message}",
+            "style": "{",
+        },
+    },
+}
+
+
 # Internationalization
 
 LANGUAGE_CODE = "en-us"
@@ -114,3 +147,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 REPORTS_DIR = BASE_DIR / "reports"
+REPORTS_DIR.mkdir(exist_ok=True)

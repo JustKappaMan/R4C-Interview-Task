@@ -55,7 +55,6 @@ def create_xlsx_file() -> Path:
     if len(wb.worksheets) > 1:
         wb.remove(wb["Sheet"])
 
-    settings.REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     output_file = settings.REPORTS_DIR / f"report_{timestamp.strftime('%Y%m%d_%H%M%S')}.xlsx"
     wb.save(output_file)
 
