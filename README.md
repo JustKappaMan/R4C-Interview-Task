@@ -2,14 +2,14 @@
 ![MIT License](https://img.shields.io/github/license/JustKappaMan/R4C-Interview-Task)
 ![Code style: black](https://img.shields.io/badge/code%20style-black-black)
 
-Тестовое задание на должность Python/Django разработчик в [BST Digital](https://career.habr.com/companies/bstdigital).
+Тестовое задание на должность Python/Django разработчик в [BST Digital](https://bst.digital).
 
 ## О проекте
-Проект разработан на языке программирования *Python* с минимальным использованием сторонних зависимостей.
+Проект разработан на языке программирования Python 3 с минимальным использованием сторонних зависимостей.
 
 С поставленными задачами и вводными данными от работодателя можно ознакомиться в файлах [employer-README.md](employer-README.md) и [employer-tasks.md](employer-tasks.md).
 
-Электронные письма отправляются в консоль в демонстрационных целях.
+Электронные письма отправляются в терминал в демонстрационных целях.
 
 ## Инструкции по запуску
 * Установите интерпретатор Python версии 3.10+
@@ -23,9 +23,9 @@
 * Покрыть тестами
 * Добавить логирование
 * Сделать некоторые вещи асинхронными
+* Хранить sensitive информацию в .env файле
 * Сверстать стилизованные веб-страницы для ошибок
 * Использовать для валидации JSON сторонний пакет вроде [jsonschema](https://pypi.org/project/jsonschema/)
-* Хранить sensitive информацию в .env файле или переменных окружения и получать её сторонним пакетом типа [python-decouple](https://pypi.org/project/python-decouple/)
 
 ## Благодарность
 * [JetBrains](https://www.jetbrains.com) за [Open Source Development лицензию](https://www.jetbrains.com/community/opensource) на их продукты
