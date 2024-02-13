@@ -25,7 +25,7 @@
 * Сделать некоторые вещи асинхронными
 * Хранить sensitive информацию в .env файле
 * Сверстать стилизованные веб-страницы для ошибок
-* Использовать для валидации JSON сторонний пакет вроде [jsonschema](https://pypi.org/project/jsonschema/)
+* Использовать для валидации JSON сторонний пакет
 
 ## Благодарность
 * [JetBrains](https://www.jetbrains.com) за [Open Source Development лицензию](https://www.jetbrains.com/community/opensource) на их продукты
