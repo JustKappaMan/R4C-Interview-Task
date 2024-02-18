@@ -1,2 +1,2 @@
-Django==4.2.9
+Django==4.2.10
 openpyxl==3.1.2
