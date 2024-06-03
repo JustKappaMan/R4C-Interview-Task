@@ -28,7 +28,6 @@
 * Использовать для валидации JSON сторонний пакет
 
 ## Благодарность
-* [JetBrains](https://www.jetbrains.com) за [Open Source Development лицензию](https://www.jetbrains.com/community/opensource) на их продукты
 * [rukanicon](https://www.flaticon.com/authors/rukanicon) за [фавиконку](https://www.flaticon.com/free-icon/chip_9980230)
 
 ## Информация о лицензии
