@@ -7,18 +7,17 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Robot',
+            name="Robot",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('serial', models.CharField(max_length=5)),
-                ('model', models.CharField(max_length=2)),
-                ('version', models.CharField(max_length=2)),
-                ('created', models.DateTimeField()),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("serial", models.CharField(max_length=5)),
+                ("model", models.CharField(max_length=2)),
+                ("version", models.CharField(max_length=2)),
+                ("created", models.DateTimeField()),
             ],
         ),
     ]

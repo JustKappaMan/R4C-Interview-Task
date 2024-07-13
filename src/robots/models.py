@@ -19,9 +19,7 @@ class RobotsManager(models.Manager):
         week_ago = now - timezone.timedelta(weeks=1)
 
         data = tuple(
-            self.filter(model=model, created__range=(week_ago, now))
-            .values("version")
-            .annotate(count=Count("id"))
+            self.filter(model=model, created__range=(week_ago, now)).values("version").annotate(count=Count("id"))
         )
 
         return {model: data} if data else {}
