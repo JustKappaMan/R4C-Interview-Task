@@ -1,6 +1,6 @@
 # R4C Interview Task
 ![MIT License](https://img.shields.io/github/license/JustKappaMan/R4C-Interview-Task)
-![Python Version](https://img.shields.io/badge/python-3.10-blue)
+![Python Version](https://img.shields.io/badge/Python-3.10-306998)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 Тестовое задание на должность Python/Django разработчик в [BST Digital](https://bst.digital).
