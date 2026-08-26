@@ -1,34 +1,30 @@
 # R4C Interview Task
 ![MIT License](https://img.shields.io/github/license/JustKappaMan/R4C-Interview-Task)
-![Code style: black](https://img.shields.io/badge/code%20style-black-black)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 Тестовое задание на должность Python/Django разработчик в [BST Digital](https://bst.digital).
 
 ## О проекте
-Проект разработан на языке программирования Python 3 с минимальным использованием сторонних зависимостей.
+Проект разработан на языке программирования Python с минимальным количеством зависимостей.
 
-С поставленными задачами и вводными данными от работодателя можно ознакомиться в файлах [employer-readme.md](employer-readme) и [employer-tasks.md](employer-tasks.md).
+С поставленными задачами и вводными данными от работодателя можно ознакомиться в файлах [employer-readme.md](employer-readme.md) и [employer-tasks.md](employer-tasks.md).
 
 Электронные письма отправляются в терминал в демонстрационных целях.
 
 ## Инструкции по запуску
-* Установите интерпретатор Python версии 3.10+
-* Сделайте клон репозитория
-* Создайте и активируйте виртуальное окружение
-* Установите зависимости
-* Выполните миграции
-* Запустите сервер с флагом `--noreload`
+```bash
+git clone https://github.com/JustKappaMan/R4C-Interview-Task.git
+cd R4C-Interview-Task
+python3.10 -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+cd src
+python3.10 manage.py migrate
+python3.10 manage.py runserver --noreload
+```
 
-## Что можно улучшить
-* Покрыть тестами
-* Добавить логирование
-* Сделать некоторые вещи асинхронными
-* Хранить sensitive информацию в .env файле
-* Сверстать стилизованные веб-страницы для ошибок
-* Использовать для валидации JSON сторонний пакет
-
-## Благодарность
-* [rukanicon](https://www.flaticon.com/authors/rukanicon) за [фавиконку](https://www.flaticon.com/free-icon/chip_9980230)
+## Благодарности
+* [Фавиконка](https://www.flaticon.com/free-icon/chip_9980230) — [rukanicon](https://www.flaticon.com/authors/rukanicon)
 
 ## Информация о лицензии
-Продукт распространяется под лицензией MIT.
+Продукт распространяется под лицензией [MIT](LICENSE).
